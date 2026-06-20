@@ -255,6 +255,29 @@ impl Peer {
             .any(|entry| !entry.value().is_closed() && !entry.value().is_hole_punched())
     }
 
+    pub fn has_hole_punched_conn(&self) -> bool {
+        self.conns
+            .iter()
+            .any(|entry| !entry.value().is_closed() && entry.value().is_hole_punched())
+    }
+
+    /// Minimum latency among direct (non-hole-punched) connections, in microseconds.
+    /// Returns None if there are no direct connections or no latency data yet.
+    pub fn min_direct_conn_latency_us(&self) -> Option<u64> {
+        self.conns
+            .iter()
+            .filter(|entry| !entry.value().is_closed() && !entry.value().is_hole_punched())
+            .filter_map(|entry| {
+                let lat = entry.value().get_stats().latency_us;
+                if lat > 0 {
+                    Some(lat)
+                } else {
+                    None
+                }
+            })
+            .min()
+    }
+
     pub fn get_directly_connections(&self) -> DashSet<uuid::Uuid> {
         self.conns
             .iter()

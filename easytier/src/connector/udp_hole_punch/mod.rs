@@ -474,8 +474,21 @@ impl PeerTaskLauncher for UdpHolePunchPeerTaskLauncher {
                 continue;
             }
 
-            if data.peer_mgr.get_peer_map().has_peer(peer_id) {
-                continue;
+            let peer_map = data.peer_mgr.get_peer_map();
+            if peer_map.has_peer(peer_id) {
+                if peer_map.has_hole_punched_conn(peer_id) {
+                    // Already has a hole-punched (P2P) connection, skip.
+                    continue;
+                }
+                // Only has direct connection(s). Check latency.
+                if let Some(latency_us) = peer_map.min_direct_conn_latency_us(peer_id) {
+                    if latency_us <= 15_000 {
+                        // Direct connection is fast enough (≤15ms), skip hole punching.
+                        continue;
+                    }
+                    // Direct connection is slow (>15ms), try hole punching.
+                }
+                // No latency data yet (new connection), also try hole punching.
             }
 
             let global_ctx = data.peer_mgr.get_global_ctx();

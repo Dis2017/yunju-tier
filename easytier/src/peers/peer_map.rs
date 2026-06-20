@@ -132,6 +132,19 @@ impl PeerMap {
         peer_id == self.my_peer_id || self.peer_map.contains_key(&peer_id)
     }
 
+    pub fn has_hole_punched_conn(&self, peer_id: PeerId) -> bool {
+        self.peer_map
+            .get(&peer_id)
+            .map(|peer| peer.has_hole_punched_conn())
+            .unwrap_or(false)
+    }
+
+    pub fn min_direct_conn_latency_us(&self, peer_id: PeerId) -> Option<u64> {
+        self.peer_map
+            .get(&peer_id)
+            .and_then(|peer| peer.min_direct_conn_latency_us())
+    }
+
     pub async fn send_msg_directly(&self, msg: ZCPacket, dst_peer_id: PeerId) -> Result<(), Error> {
         if dst_peer_id == self.my_peer_id {
             let packet_send = self.packet_send.clone();
