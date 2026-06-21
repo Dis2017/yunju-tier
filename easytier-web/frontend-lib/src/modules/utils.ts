@@ -74,8 +74,8 @@ export function buildDeviceInfo(device: any): DeviceInfo {
     let dev_info: DeviceInfo = {
         hostname: device.info?.hostname,
         public_ip: device.client_url,
-        running_network_instances: device.info?.running_network_instances?.map((instance: any) => UuidToStr(instance)),
-        running_network_count: device.info?.running_network_instances?.length,
+        running_network_instances: device.info?.running_network_instances.map((instance: any) => UuidToStr(instance)),
+        running_network_count: device.info?.running_network_instances.length,
         report_time: device.info?.report_time,
         easytier_version: device.info?.easytier_version,
         machine_id: UuidToStr(device.info?.machine_id),
