@@ -1,5 +1,5 @@
 {
-  "name": "easytier-monorepo",
+  "name": "yunju-tier-monorepo",
   "private": true,
   "pnpm": {
     "overrides": {

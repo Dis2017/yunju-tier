@@ -76,17 +76,17 @@ fn default_linux_machine_id_state_dir(
     home: Option<OsString>,
 ) -> PathBuf {
     if let Some(path) = non_empty_os_string(xdg_data_home) {
-        return PathBuf::from(path).join("easytier");
+        return PathBuf::from(path).join("yunju-tier");
     }
 
     if let Some(home) = non_empty_os_string(home) {
         return PathBuf::from(home)
             .join(".local")
             .join("share")
-            .join("easytier");
+            .join("yunju-tier");
     }
 
-    PathBuf::from("/var/lib/easytier")
+    PathBuf::from("/var/lib/yunju-tier")
 }
 
 fn default_machine_id_state_dir() -> anyhow::Result<PathBuf> {
@@ -101,18 +101,18 @@ fn default_machine_id_state_dir() -> anyhow::Result<PathBuf> {
             Ok(PathBuf::from(home)
                 .join("Library")
                 .join("Application Support")
-                .join("com.easytier"))
+                .join("com.yunju-tier"))
         },
         target_os = "windows" => {
             let local_app_data = non_empty_os_string(env::var_os("LOCALAPPDATA")).ok_or_else(|| {
                 anyhow::anyhow!("LOCALAPPDATA is not set, cannot resolve machine id state directory")
             })?;
-            Ok(PathBuf::from(local_app_data).join("easytier"))
+            Ok(PathBuf::from(local_app_data).join("yunju-tier"))
         },
         target_os = "freebsd" => {
             let home = non_empty_os_string(env::var_os("HOME"))
                 .ok_or_else(|| anyhow::anyhow!("HOME is not set, cannot resolve machine id state directory"))?;
-            Ok(PathBuf::from(home).join(".local").join("share").join("easytier"))
+            Ok(PathBuf::from(home).join(".local").join("share").join("yunju-tier"))
         },
         target_os = "android" => {
             anyhow::bail!("machine id state directory must be provided explicitly on Android");
@@ -540,7 +540,7 @@ mod tests {
                 Some(OsString::from("/tmp/xdg")),
                 Some(OsString::from("/tmp/home"))
             ),
-            PathBuf::from("/tmp/xdg").join("easytier")
+            PathBuf::from("/tmp/xdg").join("yunju-tier")
         );
         assert_eq!(
             default_linux_machine_id_state_dir(
@@ -550,11 +550,11 @@ mod tests {
             PathBuf::from("/tmp/home")
                 .join(".local")
                 .join("share")
-                .join("easytier")
+                .join("yunju-tier")
         );
         assert_eq!(
             default_linux_machine_id_state_dir(Some(OsString::new()), Some(OsString::new())),
-            PathBuf::from("/var/lib/easytier")
+            PathBuf::from("/var/lib/yunju-tier")
         );
     }
 

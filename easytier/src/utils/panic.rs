@@ -38,9 +38,9 @@ pub fn setup_panic_handler() {
         let thread = std::thread::current();
         let thread = thread.name().unwrap_or("<unnamed>");
 
-        let tmp_path = std::env::temp_dir().join("easytier-panic.log");
+        let tmp_path = std::env::temp_dir().join("yunju-tier-panic.log");
         let candidate_path = [
-            std::path::PathBuf::from_str("easytier-panic.log").ok(),
+            std::path::PathBuf::from_str("yunju-tier-panic.log").ok(),
             Some(tmp_path),
         ];
         let mut file = None;
@@ -68,8 +68,8 @@ pub fn setup_panic_handler() {
         };
 
         let msg = formatdoc! {"
-            panic occurred, if this is a bug, please report this issue on github (https://github.com/easytier/easytier/issues)
-                easytier version: {version}
+            panic occurred, if this is a bug, please report this issue on github (https://github.com/Dis2017/yunju-tier/issues)
+                yunju-tier version: {version}
                 os: {os}
                 arch: {arch}
                 panic is recorded in: {file}

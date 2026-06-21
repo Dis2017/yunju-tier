@@ -433,7 +433,7 @@ impl GlobalCtx {
                 .unwrap_or(false)
     }
 
-    pub fn is_ip_easytier_managed_ipv6(&self, ip: &std::net::Ipv6Addr) -> bool {
+    pub fn is_ip_yunju_tier_managed_ipv6(&self, ip: &std::net::Ipv6Addr) -> bool {
         self.is_ip_local_ipv6(ip) || self.public_ipv6_routes.lock().unwrap().contains(ip)
     }
 
@@ -477,7 +477,7 @@ impl GlobalCtx {
         let network_secret = self.get_network_identity().network_secret?;
         let key = network_secret.as_bytes();
         let mut mac = Hmac::<Sha256>::new_from_slice(key).unwrap();
-        mac.update(b"easytier secret proof");
+        mac.update(b"yunju-tier secret proof");
         mac.update(challenge);
         Some(mac)
     }
@@ -572,7 +572,7 @@ impl GlobalCtx {
         // fill key according to network secret
         let mut hasher = DefaultHasher::new();
         hasher.write(secret.as_bytes());
-        hasher.write(b"easytier-256bit-key"); // 添加固定盐值以区分128位和256位密钥
+        hasher.write(b"yunju-tier-256bit-key"); // 添加固定盐值以区分128位和256位密钥
 
         // 生成32字节密钥
         for i in 0..4 {
@@ -760,7 +760,7 @@ impl GlobalCtx {
     pub fn should_deny_proxy(&self, dst_addr: &SocketAddr, is_udp: bool) -> bool {
         let _g = self.net_ns.guard();
         let ip = dst_addr.ip();
-        // first check if ip is an EasyTier-managed local address
+        // first check if ip is an yunju-tier-managed local address
         // then try bind this ip, if succ means it is local ip
         let dst_is_local_et_ip = self.is_ip_local_virtual_ip(&ip);
         // this is an expensive operation, should be called sparingly

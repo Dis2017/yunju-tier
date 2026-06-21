@@ -790,7 +790,7 @@ impl PeerConn {
     }
 
     async fn do_noise_handshake_as_client(&self) -> Result<NoiseHandshakeResult, Error> {
-        let prologue = b"easytier-peerconn-noise".to_vec();
+        let prologue = b"yunju-tier-peerconn-noise".to_vec();
 
         let params: NoiseParams = "Noise_XX_25519_ChaChaPoly_SHA256"
             .parse()
@@ -1047,7 +1047,7 @@ impl PeerConn {
     where
         Fn: FnMut(&mut PeerConn, &str) -> Result<(), Error> + Send,
     {
-        let prologue = b"easytier-peerconn-noise".to_vec();
+        let prologue = b"yunju-tier-peerconn-noise".to_vec();
 
         let params: NoiseParams = "Noise_XX_25519_ChaChaPoly_SHA256"
             .parse()

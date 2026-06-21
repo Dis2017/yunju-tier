@@ -347,7 +347,7 @@ impl VirtualNic {
     fn print_troubleshooting_info() {
         log::info!(
             "Possible solutions:\
-            \n\t1. Run with root privileges: sudo ./easytier-core [options]\
+            \n\t1. Run with root privileges: sudo ./yunju-tier-core [options]\
             \n\t2. Manually create TUN device: sudo mkdir -p /dev/net && sudo mknod /dev/net/tun c 10 200\
             \n\t3. Load TUN kernel module: sudo modprobe tun\
             \n\t4. Use --no-tun flag if TUN functionality is not needed\
@@ -531,7 +531,7 @@ impl VirtualNic {
             match crate::arch::windows::add_self_to_firewall_allowlist() {
                 Ok(_) => tracing::info!("add_self_to_firewall_allowlist successful!"),
                 Err(error) => {
-                    log::warn!(%error, "Failed to add Easytier to firewall allowlist, Subnet proxy and KCP proxy may not work properly.");
+                    log::warn!(%error, "Failed to add yunju-tier to firewall allowlist, Subnet proxy and KCP proxy may not work properly.");
                     log::warn!(
                         "You can add firewall rules manually, or use --use-smoltcp to run with user-space TCP/IP stack."
                     );

@@ -83,13 +83,13 @@ use easytier::{
 rust_i18n::i18n!("locales", fallback = "en");
 
 #[derive(Parser, Debug)]
-#[command(name = "easytier-cli", author, version = EASYTIER_VERSION, about, long_about = None)]
+#[command(name = "yunju-tier-cli", author, version = EASYTIER_VERSION, about, long_about = None)]
 struct Cli {
     #[arg(
         short = 'p',
         long,
         default_value = "127.0.0.1:15888",
-        help = "easytier-core rpc portal address"
+        help = "yunju-tier-core rpc portal address"
     )]
     rpc_portal: SocketAddr,
 
@@ -135,9 +135,9 @@ enum SubCommand {
     PeerCenter,
     #[command(about = "show vpn portal (wireguard) info")]
     VpnPortal,
-    #[command(about = "inspect self easytier-core status")]
+    #[command(about = "inspect self yunju-tier-core status")]
     Node(NodeArgs),
-    #[command(about = "manage easytier-core as a system service")]
+    #[command(about = "manage yunju-tier-core as a system service")]
     Service(ServiceArgs),
     #[command(about = "show tcp/kcp proxy status")]
     Proxy,
@@ -441,15 +441,15 @@ struct ServiceArgs {
 
 #[derive(Subcommand, Debug)]
 enum ServiceSubCommand {
-    #[command(about = "register easytier-core as a system service")]
+    #[command(about = "register yunju-tier-core as a system service")]
     Install(InstallArgs),
-    #[command(about = "unregister easytier-core system service")]
+    #[command(about = "unregister yunju-tier-core system service")]
     Uninstall,
-    #[command(about = "check easytier-core system service status")]
+    #[command(about = "check yunju-tier-core system service status")]
     Status,
-    #[command(about = "start easytier-core system service")]
+    #[command(about = "start yunju-tier-core system service")]
     Start,
-    #[command(about = "stop easytier-core system service")]
+    #[command(about = "stop yunju-tier-core system service")]
     Stop,
 }
 
@@ -473,16 +473,16 @@ struct InstallArgs {
     )]
     disable_restart_on_failure: Option<bool>,
 
-    #[arg(long, help = "path to easytier-core binary")]
+    #[arg(long, help = "path to yunju-tier-core binary")]
     core_path: Option<PathBuf>,
 
-    #[arg(long, help = "working directory for the easytier-core service")]
+    #[arg(long, help = "working directory for the yunju-tier-core service")]
     service_work_dir: Option<PathBuf>,
 
     #[arg(
         trailing_var_arg = true,
         allow_hyphen_values = true,
-        help = "args to pass to easytier-core"
+        help = "args to pass to yunju-tier-core"
     )]
     core_args: Option<Vec<OsString>>,
 }
@@ -2287,7 +2287,7 @@ impl<'a> CommandHandler<'a> {
             println!();
             println!("To use this credential on a new node:");
             println!(
-                "  easytier-core --network-name <name> --secure-mode --credential {} -p <node-url>",
+                "  yunju-tier-core --network-name <name> --secure-mode --credential {} -p <node-url>",
                 response.credential_secret
             );
             Ok(())
@@ -2981,7 +2981,7 @@ async fn main() -> Result<(), Error> {
                             .unwrap()
                             .parent()
                             .unwrap()
-                            .join("easytier-core");
+                            .join("yunju-tier-core");
 
                         if cfg!(target_os = "windows") {
                             ret.set_extension("exe");
@@ -2990,7 +2990,7 @@ async fn main() -> Result<(), Error> {
                         ret
                     });
                     let bin_path = std::fs::canonicalize(bin_path).map_err(|e| {
-                        anyhow::anyhow!("failed to get easytier core application: {}", e)
+                        anyhow::anyhow!("failed to get yunju-tier core application: {}", e)
                     })?;
                     let bin_args = install_args.core_args.unwrap_or_default();
                     let work_dir = install_args.service_work_dir.unwrap_or_else(|| {
@@ -3200,10 +3200,10 @@ async fn main() -> Result<(), Error> {
         SubCommand::GenAutocomplete { shell } => {
             let mut cmd = Cli::command();
             if let Some(shell) = shell.to_shell() {
-                easytier::print_completions(shell, &mut cmd, "easytier-cli");
+                easytier::print_completions(shell, &mut cmd, "yunju-tier-cli");
             } else {
                 // Handle Nushell
-                easytier::print_nushell_completions(&mut cmd, "easytier-cli");
+                easytier::print_nushell_completions(&mut cmd, "yunju-tier-cli");
             }
         }
     }

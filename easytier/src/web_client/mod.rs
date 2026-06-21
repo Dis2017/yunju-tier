@@ -247,7 +247,7 @@ pub async fn run_web_client(
     let config_server_url = match Url::parse(config_server_url_s) {
         Ok(u) => u,
         Err(_) => format!(
-            "udp://config-server.easytier.cn:22020/{}",
+            "udp://config-server.yunju-tier.cn:22020/{}",
             config_server_url_s
         )
         .parse()

@@ -84,7 +84,7 @@ fn dump_profile(_cur_allocated: usize) {
 }
 
 #[derive(Parser, Debug)]
-#[command(name = "easytier-core", author, version = EASYTIER_VERSION , about, long_about = None)]
+#[command(name = "yunju-tier-core", author, version = EASYTIER_VERSION , about, long_about = None)]
 struct Cli {
     #[arg(
         short = 'w',
@@ -1382,7 +1382,7 @@ async fn run_main(cli: Cli) -> anyhow::Result<()> {
                 "Web client started successfully...",
             );
 
-            log::info!("Official config website: https://easytier.cn/web");
+            log::info!("Official config website: https://yunju-tier.cn/web");
         })?;
 
         Some(wc)
@@ -1461,7 +1461,7 @@ async fn run_main(cli: Cli) -> anyhow::Result<()> {
 
         log::info!(
             "\
-            Starting easytier from config file {:?}({:?}) with config:\n\
+            Starting yunju-tier from config file {:?}({:?}) with config:\n\
             ############### TOML ###############\n\
             {}\n\
             -----------------------------------\n\
@@ -1480,7 +1480,7 @@ async fn run_main(cli: Cli) -> anyhow::Result<()> {
             .with_context(|| "failed to create config from cli".to_string())?;
         log::info!(
             "\
-            Starting easytier from cli with config:\n\
+            Starting yunju-tier from cli with config:\n\
             ############### TOML ###############\n\
             {}\n\
             -----------------------------------\n\
@@ -1603,10 +1603,10 @@ pub async fn main() -> ExitCode {
     if let Some(shell) = cli.gen_autocomplete {
         let mut cmd = Cli::command();
         if let Some(shell) = shell.to_shell() {
-            crate::print_completions(shell, &mut cmd, "easytier-core");
+            crate::print_completions(shell, &mut cmd, "yunju-tier-core");
         } else {
             // Handle Nushell
-            crate::print_nushell_completions(&mut cmd, "easytier-core");
+            crate::print_nushell_completions(&mut cmd, "yunju-tier-core");
         }
         return ExitCode::SUCCESS;
     }
@@ -1628,7 +1628,7 @@ pub async fn main() -> ExitCode {
         ret_code = 1;
     }
 
-    log::info!("Stopping easytier...");
+    log::info!("Stopping yunju-tier...");
     set_prof_active(false);
 
     ExitCode::from(ret_code)

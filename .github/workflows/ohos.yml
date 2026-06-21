@@ -1,4 +1,4 @@
-name: EasyTier OHOS
+name: yunju-tier OHOS
 
 on:
   push:
@@ -80,7 +80,7 @@ jobs:
             git \
             pkg-config curl libgl1-mesa-dev expect
 
-      - name: Resolve easytier version
+      - name: Resolve yunju-tier version
         run: |
           set -e
       
@@ -129,7 +129,7 @@ jobs:
         working-directory: ./easytier-contrib/easytier-ohrs/package
         run: |
           {
-            echo "## easytier-ohrs ${EASYTIER_VERSION}"
+            echo "## yunju-tier-ohrs ${EASYTIER_VERSION}"
             echo
             git log -1 --pretty=format:"- %s"
             echo
@@ -181,32 +181,32 @@ jobs:
           ohrs doctor
           ohrs build --release --arch aarch
           ohrs artifact
-          mv package.har easytier-ohrs.har
+          mv package.har yunju-tier-ohrs.har
 
       - name: Build Release Package
         if: startsWith(github.ref, 'refs/tags/')
         working-directory: ./easytier-contrib/easytier-ohrs
         run: |
-          echo "🎉 Official Release detected. Building easytier-release..."
+          echo "🎉 Official Release detected. Building yunju-tier-release..."
           TAG_NAME="${{ github.ref_name }}"
           TAG_VERSION="${TAG_NAME#v}"
           echo "Release Version: $TAG_VERSION"
           cd package
-          jq --arg v "$TAG_VERSION" '.name = "easytier-release" | .version = $v' oh-package.json5 > oh-package.tmp.json5 && mv oh-package.tmp.json5 oh-package.json5
+          jq --arg v "$TAG_VERSION" '.name = "yunju-tier-release" | .version = $v' oh-package.json5 > oh-package.tmp.json5 && mv oh-package.tmp.json5 oh-package.json5
           cd ..
           ohrs build --release --arch aarch
           cd dist/arm64-v8a
           mv libeasytier_ohrs.so libeasytier_release.so
           cd ../..
           ohrs artifact
-          mv package.har easytier-release.har
+          mv package.har yunju-tier-release.har
 
       - name: Upload artifact
         uses: actions/upload-artifact@v5
         with:
-          name: easytier-ohos
+          name: yunju-tier-ohos
           path: |
-            ./easytier-contrib/easytier-ohrs/easytier-ohrs.har
+            ./easytier-contrib/easytier-ohrs/yunju-tier-ohrs.har
           retention-days: 5
           if-no-files-found: error
 
@@ -229,7 +229,7 @@ jobs:
           chmod 755 /home/runner/work/ohpm_crypto/*
           PASSPHRASE="$(printf '%s' "$OHPM_KEY_PASSPHRASE" | tr -d '\r\n')"
           ohpm config set key_passphrase "$PASSPHRASE"
-          ohpm publish easytier-ohrs.har
+          ohpm publish yunju-tier-ohrs.har
           
       - name: Publish To Private Ohpm
         working-directory: ./easytier-contrib/easytier-ohrs
@@ -237,10 +237,9 @@ jobs:
         run: |
           printf '%s' "${{ secrets.CODEARTS_PRIVATE_OHPM }}" > ~/.ohpm/.ohpmrc
           ohpm config set strict_ssl false
-          ohpm publish easytier-ohrs.har
-          if [ -f "easytier-release.har" ]; then
-             echo "🚀 Publishing Release package..."
-             ohpm publish easytier-release.har
+          ohpm publish yunju-tier-ohrs.har
+          if [ -f "yunju-tier-release.har" ]; then
+            ohpm publish yunju-tier-release.har
           fi
           curl --header "Content-Type: application/json" --request POST --data "{}" ${{ secrets.CODEARTS_WEBHOOKS }}
 

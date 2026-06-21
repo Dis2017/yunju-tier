@@ -666,7 +666,7 @@ mod tests {
 
     fn temp_config_path(test_name: &str) -> PathBuf {
         std::env::temp_dir().join(format!(
-            "easytier-instance-manage-{}-{}.toml",
+            "yunju-tier-instance-manage-{}-{}.toml",
             test_name,
             Uuid::new_v4()
         ))

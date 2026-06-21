@@ -1,13 +1,13 @@
 [package]
 name = "easytier"
 description = "A full meshed p2p VPN, connecting all your devices in one network with one command."
-homepage = "https://github.com/EasyTier/EasyTier"
-repository = "https://github.com/EasyTier/EasyTier"
+homepage = "https://github.com/Dis2017/yunju-tier"
+repository = "https://github.com/Dis2017/yunju-tier"
 version = "2.6.4"
 edition.workspace = true
 rust-version.workspace = true
 authors = ["kkrainbow"]
-keywords = ["vpn", "p2p", "network", "easytier"]
+keywords = ["vpn", "p2p", "network", "yunju-tier"]
 categories = ["network-programming", "command-line-utilities"]
 license-file = "LICENSE"
 readme = "README.md"
@@ -16,12 +16,12 @@ build = "build/main.rs"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [[bin]]
-name = "easytier-core"
+name = "yunju-tier-core"
 path = "src/easytier-core.rs"
 test = false
 
 [[bin]]
-name = "easytier-cli"
+name = "yunju-tier-cli"
 path = "src/easytier-cli.rs"
 
 [lib]

@@ -1,4 +1,4 @@
-name: EasyTier Mobile
+name: yunju-tier Mobile
 
 on:
   workflow_dispatch:
@@ -52,7 +52,7 @@ jobs:
             ARCH: x86_64
     runs-on: ubuntu-latest
     env:
-      NAME: easytier
+      NAME: yunju-tier
       TARGET: ${{ matrix.TARGET }}
       ARCH: ${{ matrix.ARCH }}
       OSS_BUCKET: ${{ secrets.ALIYUN_OSS_BUCKET }}
@@ -121,7 +121,7 @@ jobs:
       - name: Archive artifact
         uses: actions/upload-artifact@v5
         with:
-          name: easytier-mobile-android-${{ matrix.ARCH }}
+          name: yunju-tier-mobile-android-${{ matrix.ARCH }}
           path: |
             ./artifacts/*
 
