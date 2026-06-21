@@ -1,4 +1,4 @@
-name: yunju-tier Test
+name: EasyTier Test
 
 on:
   workflow_dispatch:
@@ -116,7 +116,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: "yunju-tier"
+          - name: "easytier"
             opts: "-E 'not test(tests::three_node)' --test-threads 1 --no-fail-fast"
 
           - name: "three_node"

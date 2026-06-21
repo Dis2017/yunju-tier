@@ -73,7 +73,7 @@ fn is_usable_public_ipv6_candidate_with_mode(
     global_ctx: &ArcGlobalCtx,
     testing: bool,
 ) -> bool {
-    !global_ctx.is_ip_yunju_tier_managed_ipv6(ip)
+    !global_ctx.is_ip_easytier_managed_ipv6(ip)
         && (testing
             || (!ip.is_loopback()
                 && !ip.is_unspecified()
@@ -214,7 +214,7 @@ impl DirectConnectorManagerData {
             .public_ip
             .iter()
             .filter_map(|ip| ip.parse::<Ipv6Addr>().ok())
-            .find(|ip| !self.global_ctx.is_ip_yunju_tier_managed_ipv6(ip));
+            .find(|ip| !self.global_ctx.is_ip_easytier_managed_ipv6(ip));
 
         // ask remote to send v6 hole punch packet
         // and no matter what the result is, continue to connect
@@ -227,7 +227,7 @@ impl DirectConnectorManagerData {
         } else {
             tracing::debug!(
                 ?remote_url,
-                "skip remote IPv6 hole-punch packet; no non-yunju-tier public IPv6 in STUN info"
+                "skip remote IPv6 hole-punch packet; no non-EasyTier public IPv6 in STUN info"
             );
         }
 
@@ -520,10 +520,10 @@ impl DirectConnectorManagerData {
                                 );
                             }
                         });
-                } else if self.global_ctx.is_ip_yunju_tier_managed_ipv6(s_addr.ip()) {
+                } else if self.global_ctx.is_ip_easytier_managed_ipv6(s_addr.ip()) {
                     tracing::debug!(
                         ?listener,
-                        "skip yunju-tier-managed IPv6 as direct-connect target"
+                        "skip EasyTier-managed IPv6 as direct-connect target"
                     );
                 } else if !s_addr.ip().is_loopback() || TESTING.load(Ordering::Relaxed) {
                     if self
@@ -821,7 +821,7 @@ mod tests {
     use super::{TESTING, mapped_listener_port, resolve_mapped_listener_addrs};
 
     #[tokio::test]
-    async fn public_ipv6_candidate_rejects_yunju_tier_managed_addr_even_in_tests() {
+    async fn public_ipv6_candidate_rejects_easytier_managed_addr_even_in_tests() {
         let global_ctx = get_mock_global_ctx();
         let managed_ipv6: cidr::Ipv6Inet = "2001:db8::2/128".parse().unwrap();
         global_ctx.set_public_ipv6_routes(BTreeSet::from([managed_ipv6]));

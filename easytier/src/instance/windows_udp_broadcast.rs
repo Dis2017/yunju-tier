@@ -615,7 +615,7 @@ impl WinDivertCaptureSocket {
         let (tx, rx) = tokio::sync::mpsc::channel(Self::CHANNEL_CAPACITY);
 
         std::thread::Builder::new()
-            .name("yunju-tier-udp-broadcast-windivert".to_owned())
+            .name("easytier-udp-broadcast-windivert".to_owned())
             .spawn(move || {
                 let mut buffer = vec![0; Self::MAX_PACKET_LEN];
                 loop {

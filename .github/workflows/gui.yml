@@ -1,4 +1,4 @@
-name: yunju-tier GUI
+name: EasyTier GUI
 
 on:
   workflow_dispatch:
@@ -75,7 +75,7 @@ jobs:
 
     runs-on: ${{ matrix.OS }}
     env:
-      NAME: yunju-tier
+      NAME: easytier
       TARGET: ${{ matrix.TARGET }}
       OS: ${{ matrix.OS }}
       GUI_TARGET: ${{ matrix.GUI_TARGET }}
@@ -152,7 +152,7 @@ jobs:
       - name: Archive artifact
         uses: actions/upload-artifact@v5
         with:
-          name: yunju-tier-gui-${{ matrix.ARTIFACT_NAME }}
+          name: easytier-gui-${{ matrix.ARTIFACT_NAME }}
           path: |
             ./artifacts/*
 

@@ -79,7 +79,7 @@ async fn set_bind_addr_for_peer_connector(
         let mut bind_addrs = vec![];
         for ipv6 in ips.interface_ipv6s.iter().chain(ips.public_ipv6.iter()) {
             let ipv6 = std::net::Ipv6Addr::from(*ipv6);
-            if global_ctx.is_ip_yunju_tier_managed_ipv6(&ipv6) {
+            if global_ctx.is_ip_easytier_managed_ipv6(&ipv6) {
                 continue;
             }
             let socket_addr = SocketAddrV6::new(ipv6, 0, 0, 0).into();
@@ -118,7 +118,7 @@ fn infer_effective_ip_version(addrs: &[SocketAddr], requested_ip_version: IpVers
     }
 }
 
-async fn yunju_tier_managed_ipv6_source_for_dst(
+async fn easytier_managed_ipv6_source_for_dst(
     global_ctx: &ArcGlobalCtx,
     dst_addr: SocketAddrV6,
 ) -> Result<Option<Ipv6Addr>, Error> {
@@ -133,7 +133,7 @@ async fn yunju_tier_managed_ipv6_source_for_dst(
     };
 
     Ok(global_ctx
-        .is_ip_yunju_tier_managed_ipv6(&local_ip)
+        .is_ip_easytier_managed_ipv6(&local_ip)
         .then_some(local_ip))
 }
 
@@ -143,17 +143,17 @@ async fn ipv6_connector_reject_reason(
     v6_addr: SocketAddrV6,
     skip_source_validation_errors: bool,
 ) -> Result<Option<String>, Error> {
-    if global_ctx.is_ip_yunju_tier_managed_ipv6(v6_addr.ip()) {
+    if global_ctx.is_ip_easytier_managed_ipv6(v6_addr.ip()) {
         return Ok(Some(format!(
-            "{} resolves to yunju-tier-managed IPv6 {}",
+            "{} resolves to EasyTier-managed IPv6 {}",
             url,
             v6_addr.ip()
         )));
     }
 
-    match yunju_tier_managed_ipv6_source_for_dst(global_ctx, v6_addr).await {
+    match easytier_managed_ipv6_source_for_dst(global_ctx, v6_addr).await {
         Ok(Some(local_ip)) => Ok(Some(format!(
-            "{} would use yunju-tier-managed IPv6 {} as local source for {}",
+            "{} would use EasyTier-managed IPv6 {} as local source for {}",
             url, local_ip, v6_addr
         ))),
         Ok(None) => Ok(None),
@@ -314,7 +314,7 @@ mod tests {
     };
 
     #[tokio::test]
-    async fn connector_rejects_yunju_tier_managed_ipv6_destination() {
+    async fn connector_rejects_easytier_managed_ipv6_destination() {
         let global_ctx = get_mock_global_ctx();
         let public_route: cidr::Ipv6Inet = "2001:db8::2/128".parse().unwrap();
         global_ctx.set_public_ipv6_routes(BTreeSet::from([public_route]));

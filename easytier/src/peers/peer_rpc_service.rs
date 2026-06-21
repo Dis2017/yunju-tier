@@ -12,17 +12,17 @@ use crate::{
     tunnel::udp,
 };
 
-fn remove_yunju_tier_managed_ipv6s(ret: &mut GetIpListResponse, global_ctx: &ArcGlobalCtx) {
+fn remove_easytier_managed_ipv6s(ret: &mut GetIpListResponse, global_ctx: &ArcGlobalCtx) {
     ret.interface_ipv6s.retain(|ip| {
         let ip = std::net::Ipv6Addr::from(*ip);
-        !global_ctx.is_ip_yunju_tier_managed_ipv6(&ip)
+        !global_ctx.is_ip_easytier_managed_ipv6(&ip)
     });
 
     if ret
         .public_ipv6
         .as_ref()
         .map(|ip| std::net::Ipv6Addr::from(*ip))
-        .is_some_and(|ip| global_ctx.is_ip_yunju_tier_managed_ipv6(&ip))
+        .is_some_and(|ip| global_ctx.is_ip_easytier_managed_ipv6(&ip))
     {
         ret.public_ipv6 = None;
     }
@@ -52,7 +52,7 @@ impl DirectConnectorRpc for DirectConnectorManagerRpcServer {
             .chain(self.global_ctx.get_running_listeners())
             .map(Into::into)
             .collect();
-        remove_yunju_tier_managed_ipv6s(&mut ret, &self.global_ctx);
+        remove_easytier_managed_ipv6s(&mut ret, &self.global_ctx);
         tracing::trace!(
             "get_ip_list: public_ipv4: {:?}, public_ipv6: {:?}, listeners: {:?}",
             ret.public_ipv4,
@@ -103,7 +103,7 @@ mod tests {
 
     use crate::{
         common::global_ctx::tests::get_mock_global_ctx,
-        peers::peer_rpc_service::remove_yunju_tier_managed_ipv6s, proto::peer_rpc::GetIpListResponse,
+        peers::peer_rpc_service::remove_easytier_managed_ipv6s, proto::peer_rpc::GetIpListResponse,
     };
 
     #[tokio::test]
@@ -128,7 +128,7 @@ mod tests {
             ..Default::default()
         };
 
-        remove_yunju_tier_managed_ipv6s(&mut ip_list, &global_ctx);
+        remove_easytier_managed_ipv6s(&mut ip_list, &global_ctx);
 
         assert_eq!(ip_list.public_ipv6, None);
         assert_eq!(ip_list.interface_ipv6s, vec![physical_ipv6.into()]);

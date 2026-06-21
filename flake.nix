@@ -1,5 +1,5 @@
 {
-  description = "yunju-tier development environment";
+  description = "EasyTier development environment";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";

@@ -1581,8 +1581,8 @@ allow = ["tcp", "icmp"]
 
 [file_logger]
 level = "info"
-file = "yunju-tier"
-dir = "/tmp/yunju-tier"
+file = "easytier"
+dir = "/tmp/easytier"
 
 [console_logger]
 level = "warn"

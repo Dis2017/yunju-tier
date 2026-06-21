@@ -195,11 +195,11 @@ pub fn do_add_self_to_firewall_allowlist(inbound: bool) -> anyhow::Result<()> {
         .replace(r"\\?\", "");
 
     let name = BSTR::from(format!(
-        "yunju-tier {} ({})",
+        "EasyTier {} ({})",
         exe_path,
         if inbound { "Inbound" } else { "Outbound" }
     ));
-    let desc = BSTR::from("Allow yunju-tier to do subnet proxy and kcp proxy");
+    let desc = BSTR::from("Allow EasyTier to do subnet proxy and kcp proxy");
     let app_path = BSTR::from(&exe_path);
 
     unsafe {
@@ -216,7 +216,7 @@ pub fn do_add_self_to_firewall_allowlist(inbound: bool) -> anyhow::Result<()> {
         rule.SetProfiles(
             NET_FW_PROFILE2_PRIVATE.0 | NET_FW_PROFILE2_PUBLIC.0 | NET_FW_PROFILE2_DOMAIN.0,
         )?;
-        rule.SetGrouping(&BSTR::from("yunju-tier"))?;
+        rule.SetGrouping(&BSTR::from("EasyTier"))?;
 
         // Get rule collection and add new rule
         let rules = policy.Rules()?;
@@ -298,11 +298,11 @@ fn add_protocol_firewall_rules(
         }?;
 
         let rule_name = format!(
-            "yunju-tier {} - {} Protocol ({})",
+            "EasyTier {} - {} Protocol ({})",
             interface_name, protocol_name, direction_name
         );
         let description = format!(
-            "Allow {} traffic on yunju-tier interface {}",
+            "Allow {} traffic on EasyTier interface {}",
             protocol_name, interface_name
         );
 
@@ -327,7 +327,7 @@ fn add_protocol_firewall_rules(
             rule.SetProfiles(
                 NET_FW_PROFILE2_PRIVATE.0 | NET_FW_PROFILE2_PUBLIC.0 | NET_FW_PROFILE2_DOMAIN.0,
             )?;
-            rule.SetGrouping(&BSTR::from("yunju-tier"))?;
+            rule.SetGrouping(&BSTR::from("EasyTier"))?;
 
             // Set the interface for this rule to apply to the specific network interface
             // According to Microsoft docs, interfaces should be represented by their friendly name
@@ -386,7 +386,7 @@ pub fn remove_interface_firewall_rules(interface_name: &str) -> anyhow::Result<(
     for protocol_name in ["TCP", "UDP", "ICMP", "ALL"] {
         for direction in ["Inbound", "Outbound"] {
             let rule_name = format!(
-                "yunju-tier {} - {} Protocol ({})",
+                "EasyTier {} - {} Protocol ({})",
                 interface_name, protocol_name, direction
             );
             let name_bstr = BSTR::from(&rule_name);
@@ -399,7 +399,7 @@ pub fn remove_interface_firewall_rules(interface_name: &str) -> anyhow::Result<(
     Ok(())
 }
 
-/// List yunju-tier firewall rules for specified interface (for debugging)
+/// List EasyTier firewall rules for specified interface (for debugging)
 #[allow(dead_code)]
 pub fn list_interface_firewall_rules(interface_name: &str) -> anyhow::Result<Vec<String>> {
     let _com = ComInitializer::new()?;
@@ -419,7 +419,7 @@ pub fn list_interface_firewall_rules(interface_name: &str) -> anyhow::Result<Vec
     for protocol_name in ["TCP", "UDP", "ICMP"] {
         for direction in ["Inbound", "Outbound"] {
             let rule_name = format!(
-                "yunju-tier {} - {} Protocol ({})",
+                "EasyTier {} - {} Protocol ({})",
                 interface_name, protocol_name, direction
             );
             if check_rule_exists(&rules, &rule_name)? {
@@ -431,7 +431,7 @@ pub fn list_interface_firewall_rules(interface_name: &str) -> anyhow::Result<Vec
     // Check fallback protocol rules
     for direction in ["Inbound", "Outbound"] {
         let rule_name = format!(
-            "yunju-tier {} - All Protocols ({})",
+            "EasyTier {} - All Protocols ({})",
             interface_name, direction
         );
         if check_rule_exists(&rules, &rule_name)? {
@@ -498,7 +498,7 @@ mod tests {
         for protocol in &expected_protocols {
             for direction in &expected_directions {
                 let rule_name = format!(
-                    "yunju-tier {} - {} Protocol ({})",
+                    "EasyTier {} - {} Protocol ({})",
                     test_interface, protocol, direction
                 );
                 assert!(

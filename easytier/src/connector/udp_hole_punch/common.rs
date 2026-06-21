@@ -720,7 +720,7 @@ async fn check_udp_socket_local_addr(
     let socket = UdpSocket::bind("0.0.0.0:0").await?;
     socket.connect(remote_mapped_addr).await?;
     if let Ok(local_addr) = socket.local_addr()
-        && let Some(err) = yunju_tier_managed_local_addr_error(&global_ctx, local_addr)
+        && let Some(err) = easytier_managed_local_addr_error(&global_ctx, local_addr)
     {
         return Err(anyhow::anyhow!(err).into());
     }
@@ -728,7 +728,7 @@ async fn check_udp_socket_local_addr(
     Ok(())
 }
 
-fn yunju_tier_managed_local_addr_error(
+fn easytier_managed_local_addr_error(
     global_ctx: &ArcGlobalCtx,
     local_addr: SocketAddr,
 ) -> Option<&'static str> {
@@ -737,8 +737,8 @@ fn yunju_tier_managed_local_addr_error(
         IpAddr::V4(ip) if global_ctx.get_ipv4().map(|ip| ip.address()) == Some(ip) => {
             Some("local address is virtual ipv4")
         }
-        IpAddr::V6(ip) if global_ctx.is_ip_yunju_tier_managed_ipv6(&ip) => {
-            Some("local address is yunju-tier-managed ipv6")
+        IpAddr::V6(ip) if global_ctx.is_ip_easytier_managed_ipv6(&ip) => {
+            Some("local address is easytier-managed ipv6")
         }
         _ => None,
     }
@@ -774,12 +774,12 @@ mod tests {
     use crate::common::global_ctx::tests::get_mock_global_ctx;
 
     use super::{
-        MAX_PUBLIC_UDP_HOLE_PUNCH_LISTENERS, yunju_tier_managed_local_addr_error,
+        MAX_PUBLIC_UDP_HOLE_PUNCH_LISTENERS, easytier_managed_local_addr_error,
         should_create_public_listener, should_retry_public_listener_selection,
     };
 
     #[tokio::test]
-    async fn local_addr_check_rejects_yunju_tier_public_ipv6_route() {
+    async fn local_addr_check_rejects_easytier_public_ipv6_route() {
         let global_ctx = get_mock_global_ctx();
         let public_route: cidr::Ipv6Inet = "2001:db8::4/128".parse().unwrap();
         global_ctx.set_public_ipv6_routes(BTreeSet::from([public_route]));
@@ -787,8 +787,8 @@ mod tests {
         let local_addr: SocketAddr = "[2001:db8::4]:1234".parse().unwrap();
 
         assert_eq!(
-            yunju_tier_managed_local_addr_error(&global_ctx, local_addr),
-            Some("local address is yunju-tier-managed ipv6")
+            easytier_managed_local_addr_error(&global_ctx, local_addr),
+            Some("local address is easytier-managed ipv6")
         );
     }
 
