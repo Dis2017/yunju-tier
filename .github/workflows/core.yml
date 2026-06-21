@@ -1,4 +1,4 @@
-name: yunju-tier Core
+    name: yunju-tier Core
 
 on:
   workflow_dispatch:
